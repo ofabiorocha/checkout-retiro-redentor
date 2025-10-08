@@ -25,17 +25,6 @@ export default function EventPage() {
         <section className="lg:col-span-2 order-1">
           <EventHeader event={EVENT} />
         </section>
-
-        {/* RESUMO */}
-        <aside className="lg:col-span-1 order-2 lg:self-start">
-          <OrderSummary
-            ticketTypes={TICKET_TYPES}
-            selectedTickets={selectedTickets}
-            step="tickets"
-            loading={false}
-          />
-        </aside>
-
         {/* SELEÇÃO DE INGRESSOS */}
         <section className="lg:col-span-2 order-3 lg:col-start-1">
           <TicketSelector
@@ -46,6 +35,17 @@ export default function EventPage() {
           />
         </section>
       </div>
+
+      {/* RESUMO */}
+      <aside className="lg:col-span-1 order-2 lg:self-start">
+        <OrderSummary
+          ticketTypes={TICKET_TYPES}
+          selectedTickets={selectedTickets}
+          step="tickets"
+          loading={false}
+        />
+      </aside>
+
     </main>
   )
 }
