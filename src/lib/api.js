@@ -1,5 +1,5 @@
 const API = import.meta.env.VITE_API_URL || "http://localhost:4000";
-const TOKEN = import.meta.env.VITE_API_TOKEN;
+const TOKEN = import.meta.env.TOKEN;
 
 
 export async function createCardCheckout(payload) {
