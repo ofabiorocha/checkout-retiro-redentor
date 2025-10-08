@@ -2,23 +2,25 @@ import { Users } from 'lucide-react'
 import { formatCurrency } from '@/lib/formatters'
 
 export default function TicketSelector({ ticketTypes, selectedTickets, onChange, error }) {
-  const MAX_PER_TYPE = 10
-  const MIN_PER_TYPE = 0
+  const MAX_TICKETS = 5
+  const MIN_TICKETS = 0
 
-  const handleTicketChange = (ticketId, quantity) => {
-    const safeQty = Math.max(MIN_PER_TYPE, Math.min(MAX_PER_TYPE, quantity))
+  const handleTicketChange = (ticketId, newQty) => {
+    const safeQty = Math.max(MIN_TICKETS, Math.min(MAX_TICKETS, newQty))
     onChange({ ...selectedTickets, [ticketId]: safeQty })
   }
 
   return (
     <section className="bg-white rounded-2xl shadow-card p-6">
-      <h2 className="text-2xl font-bold mb-6 text-text-primary">Selecione seus ingressos</h2>
+      <h2 className="text-2xl font-bold mb-6 text-text-primary">
+        Selecione seus ingressos
+      </h2>
 
       <div className="space-y-5">
         {ticketTypes.map(ticket => {
           const quantity = selectedTickets[ticket.id] || 0
-          const isMinusDisabled = quantity <= MIN_PER_TYPE
-          const isPlusDisabled = quantity >= MAX_PER_TYPE
+          const isMinusDisabled = quantity <= MIN_TICKETS
+          const isPlusDisabled = quantity >= MAX_TICKETS
 
           return (
             <div
@@ -34,11 +36,9 @@ export default function TicketSelector({ ticketTypes, selectedTickets, onChange,
                   </p>
                 </div>
 
-                <div className="text-right">
-                  <p className="text-2xl font-bold text-brand-600">
-                    {formatCurrency(ticket.price)}
-                  </p>
-                </div>
+                <p className="text-2xl font-bold text-brand-600">
+                  {formatCurrency(ticket.price)}
+                </p>
               </div>
 
               <div className="flex items-center gap-3">
@@ -51,8 +51,7 @@ export default function TicketSelector({ ticketTypes, selectedTickets, onChange,
                     className={`w-8 h-8 rounded-lg flex items-center justify-center font-bold transition
                       ${isMinusDisabled
                         ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
-                        : 'bg-gray-100 hover:bg-gray-200 text-gray-800'}
-                    `}
+                        : 'bg-gray-100 hover:bg-gray-200 text-gray-800'}`}
                   >
                     −
                   </button>
@@ -66,8 +65,7 @@ export default function TicketSelector({ ticketTypes, selectedTickets, onChange,
                     className={`w-8 h-8 rounded-lg flex items-center justify-center font-bold transition
                       ${isPlusDisabled
                         ? 'bg-brand-200 text-white/80 cursor-not-allowed'
-                        : 'bg-brand-600 hover:bg-brand-700 text-white'}
-                    `}
+                        : 'bg-brand-600 hover:bg-brand-700 text-white'}`}
                   >
                     +
                   </button>
@@ -83,6 +81,10 @@ export default function TicketSelector({ ticketTypes, selectedTickets, onChange,
           {error}
         </div>
       )}
+
+      <p className="text-xs text-gray-500 text-center mt-6">
+        Máximo de <span className="font-semibold">{MAX_TICKETS}</span> inscrições por compra
+      </p>
     </section>
   )
 }
