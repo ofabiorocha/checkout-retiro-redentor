@@ -19,15 +19,17 @@ export default function EventPage() {
 
   return (
     <main className="min-h-screen py-8 px-4">
-      <div className="max-w-6xl mx-auto flex flex-col lg:grid lg:grid-cols-3 gap-8 items-start">
+      <div className="max-w-6xl mx-auto flex flex-col gap-6 lg:grid lg:grid-cols-3 lg:gap-8 lg:items-start">
 
-        {/* HERO (vídeo) */}
-        <section className="lg:col-span-3 order-1">
-          <EventHeader event={EVENT} />
+        {/* HERO (vídeo / banner) */}
+        <section className="w-full order-1 lg:col-span-3">
+          <div className="aspect-[16/9] w-full rounded-2xl overflow-hidden shadow-card">
+            <EventHeader event={EVENT} />
+          </div>
         </section>
 
         {/* SELEÇÃO DE INGRESSOS */}
-        <section className="order-2 lg:col-span-2 lg:order-2">
+        <section className="order-2 lg:order-2 lg:col-span-2">
           <TicketSelector
             ticketTypes={TICKET_TYPES}
             selectedTickets={selectedTickets}
@@ -37,7 +39,7 @@ export default function EventPage() {
         </section>
 
         {/* RESUMO */}
-        <aside className="order-3 lg:col-span-1 lg:order-3 lg:self-start">
+        <aside className="order-3 lg:order-3 lg:col-span-1 lg:self-start">
           <OrderSummary
             ticketTypes={TICKET_TYPES}
             selectedTickets={selectedTickets}
@@ -48,6 +50,5 @@ export default function EventPage() {
 
       </div>
     </main>
-
   )
 }
