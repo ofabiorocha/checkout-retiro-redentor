@@ -37,6 +37,7 @@ export default function EventPage() {
   async function handlePay() {
     if (!formData.name || !formData.email || !formData.cpf || !formData.phone) {
       setError("Preencha todos os campos obrigatórios.");
+      console.warn("⚠️ Campos obrigatórios faltando:", formData);
       return;
     }
 
@@ -53,9 +54,22 @@ export default function EventPage() {
     setLoading(true);
     setError("");
 
+    const log = (...args) => {
+      if (process.env.NODE_ENV !== "production") {
+        console.log("%c🧾 [Checkout]", "color: #7c3aed; font-weight: bold;", ...args);
+      }
+    };
+
     try {
-      // CARTÃO: redireciona para hosted checkout do Asaas
+      log("Iniciando pagamento:", {
+        method: formData.paymentMethod,
+        installments: formData.installments,
+        buyer: formData.name,
+        items
+      });
+
       if (formData.paymentMethod === "CREDIT_CARD") {
+        log("→ Criando checkout de cartão...");
         const { checkoutUrl } = await createCardCheckout({
           buyer: {
             name: formData.name,
@@ -65,12 +79,14 @@ export default function EventPage() {
           },
           items,
         });
+
         if (!checkoutUrl) throw new Error("CheckoutUrl não retornado.");
+        log("✅ Checkout de cartão criado:", checkoutUrl);
         window.location.href = checkoutUrl;
         return;
       }
 
-      // PIX / BOLETO: gerar N cobranças via API (envia installments)
+      log(`→ Criando cobranças via ${formData.paymentMethod}...`);
       const resp = await createPixBoletoCheckout({
         buyer: {
           name: formData.name,
@@ -80,17 +96,14 @@ export default function EventPage() {
         },
         items,
         payment: {
-          method: formData.paymentMethod,       // "PIX" ou "BOLETO"
+          method: formData.paymentMethod,
           installments: formData.installments || 1,
         },
       });
 
-      // Normaliza diferentes formatos de retorno do backend
-      // Possíveis formatos que tratamos:
-      // - { payments: [{parcela, id, link}, ...] }
-      // - { links: [{ numero, url }, ...] }
-      // - { primeiraParcela: { id, link, url }, links: [...] }
-      // - ou outras variações
+      log("📦 Resposta bruta do backend:", resp);
+
+      // Normaliza formatos de retorno
       let paymentsArray = null;
 
       if (Array.isArray(resp.payments)) {
@@ -106,7 +119,6 @@ export default function EventPage() {
           id: p.id ?? null,
         }));
       } else if (resp.primeiraParcela && resp.links) {
-        // backend custom (ex.: total/parcelas/primeiraParcela/links)
         paymentsArray = [];
         if (resp.primeiraParcela) {
           paymentsArray.push({
@@ -123,7 +135,6 @@ export default function EventPage() {
           }));
         }
       } else {
-        // fallback: procurar keys com urls
         const possible = [];
         for (const k of Object.keys(resp || {})) {
           const val = resp[k];
@@ -141,29 +152,34 @@ export default function EventPage() {
       }
 
       if (Array.isArray(paymentsArray) && paymentsArray.length > 0) {
-        // abrir primeira parcela em nova aba (se tiver link)
+        log(`✅ ${paymentsArray.length} cobrança(s) geradas:`, paymentsArray);
         const first = paymentsArray[0];
         if (first.link) {
+          log("🔗 Abrindo primeira parcela:", first.link);
           window.open(first.link, "_blank", "noopener");
         }
 
-        // mostrar lista sucinta para o usuário
         const listText = paymentsArray
           .map(p => `Parcela ${p.parcela ?? '?'}: ${p.link ?? 'sem link'}`)
           .join('\n');
 
         alert(`✅ Foram geradas ${paymentsArray.length} parcela(s):\n\n${listText}`);
       } else {
-        // nenhum link detectado: informar ao usuário
+        log("⚠️ Nenhum link detectado:", resp);
         alert("Cobranças geradas com sucesso (sem links imediatos). Verifique o e-mail informado.");
       }
+
     } catch (e) {
-      console.error("Erro no pagamento:", e);
-      // tenta extrair mensagem útil
+      console.group("%c💥 Erro no pagamento", "color: red; font-weight: bold;");
+      console.error("Mensagem:", e?.message);
+      console.error("Detalhes completos:", e);
+      console.groupEnd();
+
       const msg = e?.message || "Erro ao processar pagamento.";
       setError(msg);
     } finally {
       setLoading(false);
+      log("🕓 Finalizando fluxo de pagamento");
     }
   }
 
