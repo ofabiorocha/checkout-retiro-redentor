@@ -174,6 +174,7 @@ export default function EventPage() {
       console.error("Mensagem:", e?.message);
       console.error("Detalhes completos:", e);
       console.groupEnd();
+      
       const msg = e?.message || "Erro ao processar pagamento.";
       setError(msg);
     } finally {
