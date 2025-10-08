@@ -12,7 +12,7 @@ export const EVENT = {
 export const TICKET_TYPES = [
   {
     id: 1,
-    name: 'INSCRIÇÃO INDIVIDUAL - RETIRO REDENTOR 2026',
+    name: 'INSCRIÇÃO INDIVIDUAL',
     price: 350.00,
     available: 110,
     description: 'Vaga para adultos e crianças a partir de 5 anos',
