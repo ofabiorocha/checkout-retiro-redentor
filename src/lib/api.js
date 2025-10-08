@@ -1,6 +1,7 @@
 const API = import.meta.env.VITE_API_URL || "http://localhost:4000";
 const TOKEN = import.meta.env.VITE_API_TOKEN;
 
+
 export async function createCardCheckout(payload) {
   const resp = await fetch(`${API}/api/checkout/card?x-vercel-protection-bypass=${encodeURIComponent(TOKEN)}`, {
     method: "POST",
