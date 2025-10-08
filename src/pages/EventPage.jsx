@@ -23,8 +23,10 @@ export default function EventPage() {
 
         {/* HERO (vídeo / banner) */}
         <section className="w-full order-1 lg:col-span-3">
-          <div className="aspect-[16/9] w-full rounded-2xl overflow-hidden shadow-card">
-            <EventHeader event={EVENT} />
+          <div className="rounded-2xl overflow-hidden shadow-card">
+            <div className="aspect-[16/9] w-full">
+              <EventHeader event={EVENT} />
+            </div>
           </div>
         </section>
 
