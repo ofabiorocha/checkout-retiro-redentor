@@ -7,7 +7,8 @@ export default defineConfig({
   plugins: [react()],
   
   // Caminho base (ajuste se o projeto for hospedado em subdiretório)
-  base: '/retiroredentor2026/',
+  // base: '/retiroredentor2026/',
+  base: '/',
 
   // Aliases para facilitar imports (ex: import X from "@/components/X")
   resolve: {

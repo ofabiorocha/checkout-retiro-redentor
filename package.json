@@ -4,11 +4,11 @@
   "version": "0.0.0",
   "scripts": {
     "dev": "vite",
-    "preview": "vite preview",
-    "build": "vite build && mkdir -p dist/retiroredentor2026 && mv dist/* dist/retiroredentor2026/"
+    "build": "vite build",
+    "preview": "vite preview"
   },
   "engines": {
-    "node": "20.x"
+    "node": ">=20 <21"
   },
   "dependencies": {
     "lucide-react": "^0.544.0",
