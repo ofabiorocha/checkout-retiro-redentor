@@ -1,0 +1,9 @@
+{
+    "builds": [
+      { "src": "retiroredentor2026/**/*", "use": "@vercel/static" }
+    ],
+    "routes": [
+      { "src": "/retiroredentor2026/(.*)", "dest": "/retiroredentor2026/$1" }
+    ]
+  }
+  
