@@ -47,3 +47,5 @@ coverage/
 
 # PNPM / Yarn / NPM
 .pnpm-deb
+
+src/tmpnodejsnpm-cache/*

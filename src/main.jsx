@@ -1,21 +1,17 @@
-import { StrictMode } from 'react'
-import { createRoot } from 'react-dom/client'
-import App from './App'
+import React from 'react'
+import ReactDOM from 'react-dom/client'
+import { createBrowserRouter, RouterProvider } from 'react-router-dom'
+import EventPage from '@/pages/EventPage'
 import './index.css'
 
-function renderApp() {
-  const rootElement = document.getElementById('root')
+const router = createBrowserRouter([
+  { path: '/', element: <EventPage /> },
+  // você pode adicionar outras rotas depois:
+  // { path: '/success', element: <SuccessPage /> },
+])
 
-  if (!rootElement) {
-    console.error('Elemento #root não encontrado no index.html')
-    return
-  }
-
-  createRoot(rootElement).render(
-    <StrictMode>
-      <App />
-    </StrictMode>
-  )
-}
-
-renderApp()
+ReactDOM.createRoot(document.getElementById('root')).render(
+  <React.StrictMode>
+    <RouterProvider router={router} />
+  </React.StrictMode>
+)
